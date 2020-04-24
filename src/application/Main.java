@@ -2,9 +2,11 @@ package application;
 
 import javafx.scene.control.*;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 
@@ -54,10 +56,10 @@ public class Main extends Application {
 	
 	public Button[] makeNumberButtons() {
 		Button[] numButtons = {
-				new Button("7"), new Button("8"), new Button("9"),
-				new Button("4"), new Button("5"), new Button("6"),
-				new Button("1"), new Button("2"), new Button("3"),
-				new Button("0")
+				new Button(" 7 "), new Button(" 8 "), new Button(" 9 "),
+				new Button(" 4 "), new Button(" 5 "), new Button(" 6 "),
+				new Button(" 1 "), new Button(" 2 "), new Button(" 3 "),
+				new Button(" 0 ")
 			};
 			
 		for (Button b : numButtons)
@@ -96,22 +98,26 @@ public class Main extends Application {
 	@Override
 	public void start(Stage window) {
 		
-		VBox rootLayout = new VBox(vSpace);
-		HBox r0 = new HBox(hSpace);
-		HBox r1 = new HBox(hSpace);
-		HBox r2 = new HBox(hSpace);
-		HBox r3 = new HBox(hSpace);
-		HBox r4 = new HBox(hSpace);
-		HBox r5 = new HBox(hSpace);
+		GridPane buttonGrid = new GridPane();
+		buttonGrid.setAlignment(Pos.CENTER);
+		buttonGrid.setHgap(10);
+		buttonGrid.setVgap(10);
+		buttonGrid.setPadding(new Insets(25, 25, 25, 25));
 		
-		rootLayout.getChildren().add(r0);
-		rootLayout.getChildren().add(r1);
-		rootLayout.getChildren().add(r2);
-		rootLayout.getChildren().add(r3);
-		rootLayout.getChildren().add(r4);
-		rootLayout.getChildren().add(r5);
+		VBox vBox = new VBox();
+		vBox.getChildren().add(display);
+		vBox.setAlignment(Pos.CENTER);
+		vBox.getChildren().add(buttonGrid);
 		
 		Button clear = new Button("CE");
+		Button sign = new Button("+/-");
+		Button decimal = new Button(" . ");
+		Button equals = new Button(" = ");
+		Button plus = new Button(" + ");
+		Button minus = new Button(" - ");
+		Button times = new Button(" * ");
+		Button divide = new Button(" / ");
+		
 		clear.setOnAction(e -> {
 			op = 0x00; 
 			op1 = op2 = 0;
@@ -119,7 +125,6 @@ public class Main extends Application {
 			currentOp = 0; 
 			updateDisplay();});
 		
-		Button sign = new Button("+/-");
 		sign.setOnAction(e -> {
 			if (currentOp == 0 || currentOp == 3) {
 				op1 = op1 * -1;
@@ -128,41 +133,30 @@ public class Main extends Application {
 				op2 = op2 * -1;
 			} updateDisplay();});
 		
-		Button decimal = new Button(".");
-		decimal.setOnAction(e -> {factor = factor == 10? 0.1 : 10;});
-		
-		Button equals = new Button("=");
-		equals.setOnAction(e -> {calculate();});
-		
-		Button plus = new Button("+");
-		Button minus = new Button("-");
-		Button times = new Button("*");
-		Button divide = new Button("/");
-		
+		equals.setOnAction(e -> calculate());
+		decimal.setOnAction(e -> factor = factor == 10? 0.1 : 10);
 		plus.setOnAction(e ->   {op = 0x01; factor = currentOp == 2 ? factor : 10; currentOp = currentOp == 1 ? 1 : 2; updateDisplay();});
 		minus.setOnAction(e ->  {op = 0x02; factor = currentOp == 2 ? factor : 10; currentOp = currentOp == 1 ? 1 : 2; updateDisplay();});
 		times.setOnAction(e ->  {op = 0x04; factor = currentOp == 2 ? factor : 10; currentOp = currentOp == 1 ? 1 : 2; updateDisplay();});
 		divide.setOnAction(e -> {op = 0x08; factor = currentOp == 2 ? factor : 10; currentOp = currentOp == 1 ? 1 : 2; updateDisplay();});
-		
-		r0.getChildren().add(clear);
-		r0.getChildren().add(display);
-		r1.getChildren().add(divide);
-		r2.getChildren().add(times);
-		r3.getChildren().add(minus);
-		r4.getChildren().add(plus);
-		r5.getChildren().add(equals);
-		
+
 		Button [] numButtons = makeNumberButtons();
-		for (int i = 0; i < 3; i++)	{ r2.getChildren().add(numButtons[i]); }
-		for (int i = 3; i < 6; i++)	{ r3.getChildren().add(numButtons[i]); }
-		for (int i = 6; i < 9; i++) { r4.getChildren().add(numButtons[i]); }
+		for (int i = 0; i < 3; i++)	{ buttonGrid.add(numButtons[i], i, 2); }
+		for (int i = 3; i < 6; i++)	{ buttonGrid.add(numButtons[i], i-3, 3); }
+		for (int i = 6; i < 9; i++) { buttonGrid.add(numButtons[i], i-6, 4); }
 		
-		r5.getChildren().add(sign);
-		r5.getChildren().add(numButtons[9]);
-		r5.getChildren().add(decimal);
+		buttonGrid.add(clear, 0, 1);
+		buttonGrid.add(divide,  4, 1);
+		buttonGrid.add(times, 4, 2);
+		buttonGrid.add(minus, 4, 3);
+		buttonGrid.add(plus, 4, 4);
+		buttonGrid.add(equals, 4, 5);
+		buttonGrid.add(sign, 0, 5);
+		buttonGrid.add(numButtons[9], 1, 5);
+		buttonGrid.add(decimal, 2, 5);
 		
 		updateDisplay();
-		Scene scene = new Scene(rootLayout,200,200);
+		Scene scene = new Scene(vBox, 250, 250);
 		
 		window.setTitle("Calculator");
 		window.setScene(scene);
