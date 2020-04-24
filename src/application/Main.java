@@ -140,7 +140,7 @@ public class Main extends Application {
 		times.setOnAction(e ->  {op = 0x04; factor = currentOp == 2 ? factor : 10; currentOp = currentOp == 1 ? 1 : 2; updateDisplay();});
 		divide.setOnAction(e -> {op = 0x08; factor = currentOp == 2 ? factor : 10; currentOp = currentOp == 1 ? 1 : 2; updateDisplay();});
 
-		Button [] numButtons = makeNumberButtons();
+		Button[] numButtons = makeNumberButtons();
 		for (int i = 0; i < 3; i++)	{ buttonGrid.add(numButtons[i], i, 2); }
 		for (int i = 3; i < 6; i++)	{ buttonGrid.add(numButtons[i], i-3, 3); }
 		for (int i = 6; i < 9; i++) { buttonGrid.add(numButtons[i], i-6, 4); }
