@@ -98,6 +98,9 @@ public class Main extends Application {
 	@Override
 	public void start(Stage window) {
 		
+		TextField field = new TextField();
+		field.getText();
+		
 		GridPane buttonGrid = new GridPane();
 		buttonGrid.setAlignment(Pos.CENTER);
 		buttonGrid.setHgap(10);
