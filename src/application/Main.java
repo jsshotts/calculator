@@ -1,5 +1,6 @@
 package application;
 
+import java.lang.Math;
 import javafx.scene.control.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -98,9 +99,6 @@ public class Main extends Application {
 	@Override
 	public void start(Stage window) {
 		
-		TextField field = new TextField();
-		field.getText();
-		
 		GridPane buttonGrid = new GridPane();
 		buttonGrid.setAlignment(Pos.CENTER);
 		buttonGrid.setHgap(10);
@@ -120,6 +118,7 @@ public class Main extends Application {
 		Button minus = new Button(" - ");
 		Button times = new Button(" * ");
 		Button divide = new Button(" / ");
+		Button log = new Button("log");
 		
 		clear.setOnAction(e -> {
 			op = 0x00; 
@@ -136,6 +135,14 @@ public class Main extends Application {
 				op2 = op2 * -1;
 			} updateDisplay();});
 		
+		log.setOnAction(e -> {
+			if (currentOp == 0 || currentOp == 3) {
+				op1 = Math.log10(op1);
+			} 
+			else {
+				op2 = Math.log10(op2);
+			} updateDisplay();});
+		
 		equals.setOnAction(e -> calculate());
 		decimal.setOnAction(e -> factor = factor == 10? 0.1 : 10);
 		plus.setOnAction(e ->   {op = 0x01; factor = currentOp == 2 ? factor : 10; currentOp = currentOp == 1 ? 1 : 2; updateDisplay();});
@@ -148,6 +155,7 @@ public class Main extends Application {
 		for (int i = 3; i < 6; i++)	{ buttonGrid.add(numButtons[i], i-3, 3); }
 		for (int i = 6; i < 9; i++) { buttonGrid.add(numButtons[i], i-6, 4); }
 		
+		buttonGrid.add(log, 2, 1);
 		buttonGrid.add(clear, 0, 1);
 		buttonGrid.add(divide,  4, 1);
 		buttonGrid.add(times, 4, 2);
