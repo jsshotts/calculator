@@ -1,2 +1,1 @@
-# calculator
-JavaFX
+The singleton class acts as a calculator "history" it provides a stack of previous calculator answers. After making a couple of calculations, you can press the "prev" button and see past results.
