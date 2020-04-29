@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
-
 public class Main extends Application {
 	
 	int hSpace = 10;
@@ -119,6 +118,7 @@ public class Main extends Application {
 		Button times = new Button(" * ");
 		Button divide = new Button(" / ");
 		Button log = new Button("log");
+		Button prev = new Button("prev");
 		
 		clear.setOnAction(e -> {
 			op = 0x00; 
@@ -143,7 +143,8 @@ public class Main extends Application {
 				op2 = Math.log10(op2);
 			} updateDisplay();});
 		
-		equals.setOnAction(e -> calculate());
+		equals.setOnAction(e -> {calculate(); Singleton.getInstance().add(op1);});
+		prev.setOnAction(e -> {currentOp = 0; op2 = 0; op1 = Singleton.getInstance().prev(); updateDisplay();});
 		decimal.setOnAction(e -> factor = factor == 10? 0.1 : 10);
 		plus.setOnAction(e ->   {op = 0x01; factor = currentOp == 2 ? factor : 10; currentOp = currentOp == 1 ? 1 : 2; updateDisplay();});
 		minus.setOnAction(e ->  {op = 0x02; factor = currentOp == 2 ? factor : 10; currentOp = currentOp == 1 ? 1 : 2; updateDisplay();});
@@ -155,6 +156,7 @@ public class Main extends Application {
 		for (int i = 3; i < 6; i++)	{ buttonGrid.add(numButtons[i], i-3, 3); }
 		for (int i = 6; i < 9; i++) { buttonGrid.add(numButtons[i], i-6, 4); }
 		
+		buttonGrid.add(prev, 1, 1);
 		buttonGrid.add(log, 2, 1);
 		buttonGrid.add(clear, 0, 1);
 		buttonGrid.add(divide,  4, 1);
