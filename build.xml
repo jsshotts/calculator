@@ -6,15 +6,33 @@
               as the first entry and export the buildfile again. --><project basedir="." default="build" name="calculator">
     <property environment="env"/>
     <property name="ECLIPSE_HOME" value="../../eclipse/java-2020-03/eclipse/"/>
+    <property name="junit.output.dir" value="junit"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.8"/>
     <property name="source" value="1.8"/>
     <path id="JavaFX SDK.libraryclasspath">
         <pathelement location="../../.p2/pool/plugins/org.eclipse.fx.ide.css.jfx8_2.3.0.201603030809.jar"/>
     </path>
+    <path id="JUnit 5.libraryclasspath">
+        <pathelement location="../../.p2/pool/plugins/org.junit.jupiter.api_5.6.0.v20200203-2009.jar"/>
+        <pathelement location="../../.p2/pool/plugins/org.junit.jupiter.engine_5.6.0.v20200203-2009.jar"/>
+        <pathelement location="../../.p2/pool/plugins/org.junit.jupiter.migrationsupport_5.6.0.v20200203-2009.jar"/>
+        <pathelement location="../../.p2/pool/plugins/org.junit.jupiter.params_5.6.0.v20200203-2009.jar"/>
+        <pathelement location="../../.p2/pool/plugins/org.junit.platform.commons_1.6.0.v20200203-2009.jar"/>
+        <pathelement location="../../.p2/pool/plugins/org.junit.platform.engine_1.6.0.v20200203-2009.jar"/>
+        <pathelement location="../../.p2/pool/plugins/org.junit.platform.launcher_1.6.0.v20200203-2009.jar"/>
+        <pathelement location="../../.p2/pool/plugins/org.junit.platform.runner_1.6.0.v20200203-2009.jar"/>
+        <pathelement location="../../.p2/pool/plugins/org.junit.platform.suite.api_1.6.0.v20200203-2009.jar"/>
+        <pathelement location="../../.p2/pool/plugins/org.junit.vintage.engine_5.6.0.v20200203-2009.jar"/>
+        <pathelement location="../../.p2/pool/plugins/org.opentest4j_1.2.0.v20190826-0900.jar"/>
+        <pathelement location="../../.p2/pool/plugins/org.apiguardian_1.1.0.v20190826-0900.jar"/>
+        <pathelement location="../../.p2/pool/plugins/org.junit_4.13.0.v20200204-1500.jar"/>
+        <pathelement location="../../.p2/pool/plugins/org.hamcrest.core_1.3.0.v20180420-1519.jar"/>
+    </path>
     <path id="calculator.classpath">
         <pathelement location="bin"/>
         <path refid="JavaFX SDK.libraryclasspath"/>
+        <path refid="JUnit 5.libraryclasspath"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
@@ -53,14 +71,26 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-    <target name="Calculator">
-        <java classname="application.Calculator" failonerror="true" fork="yes">
+    <target name="Main (1)">
+        <java classname="logic.Main" failonerror="true" fork="yes">
             <classpath refid="calculator.classpath"/>
         </java>
     </target>
-    <target name="Main">
-        <java classname="application.Main" failonerror="true" fork="yes">
+    <target name="calculator">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="test.AllTests" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
             <classpath refid="calculator.classpath"/>
-        </java>
+        </junit>
+    </target>
+    <target name="junitreport">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
     </target>
 </project>

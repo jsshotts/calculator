@@ -1,6 +1,5 @@
-package application;
+package logic;
 
-import java.lang.Math;
 import javafx.scene.control.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;

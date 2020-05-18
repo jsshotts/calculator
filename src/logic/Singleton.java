@@ -1,4 +1,4 @@
-package application;
+package logic;
 
 import java.util.Stack;
 
@@ -16,12 +16,6 @@ public class Singleton {
 		return instance;
 	}
 	
-	public void add(Double x)
-	{
-		hist.push(x);
-	}
-	public Double prev()
-	{
-		return hist.pop();
-	}
+	public void add(Double x) { hist.push(x); }
+	public Double prev() { return hist.pop(); }
 }
